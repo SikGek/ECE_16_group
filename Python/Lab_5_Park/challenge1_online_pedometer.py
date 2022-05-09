@@ -33,6 +33,7 @@ if __name__ == "__main__":
         # if enough time has elapsed, process the data and plot it
         current_time = time()
 
+        #if data is available to send, send data
         try:
           comms.send_message(strsteps)
         except:
