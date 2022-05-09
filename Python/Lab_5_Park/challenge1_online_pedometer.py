@@ -21,8 +21,6 @@ if __name__ == "__main__":
     previous_time = time()
     while(True):
       message = comms.receive_message()
-      if message != None and "steps" in message:
-        print(message)
       if(message != None):
         try:
           (m1, m2, m3, m4) = message.split(',')

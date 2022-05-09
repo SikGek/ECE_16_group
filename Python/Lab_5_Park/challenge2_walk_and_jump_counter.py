@@ -25,7 +25,6 @@ if __name__ == "__main__":
       message = str(comms.receive_message()).strip()
       message = message.strip()
       if str(message) in "uploadData":
-        print(message)
         current_time = time()
         while(message != "uploadComplete"):
           #our data is already being uploaded entry by entry.
@@ -48,7 +47,6 @@ if __name__ == "__main__":
             except:
               continue
             plt.cla()
-            print(filtered)
             plt.plot(filtered)
             plt.title("Step Count: %d" % steps)
             plt.show(block=False)
@@ -58,13 +56,12 @@ if __name__ == "__main__":
             current_time = time()
             # if we receive a request for jumps and steps, lets send it
             #qmessage = comms.receive_message()
-      if str(message) in 'stepRequest':
-        print(strjumps)
-        comms.send_message(strsteps)
-      if (message == 'jumpRequest'):
-        print(strsteps)
-        print("Sent a Jump")
-        comms.send_message(strjumps)
+      try:
+        sjmps = strsteps + "," + strjumps
+        comms.send_message(sjmps)
+        print(sjmps)
+      except:
+        pass
 
 
   except(Exception, KeyboardInterrupt) as e:
