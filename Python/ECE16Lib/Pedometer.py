@@ -18,10 +18,10 @@ class Pedometer:
   __fs = 300           # Sampling rate in Hz
   __b = None         # Low-pass coefficients
   __a = None         # Low-pass coefficients
-  __thresh_walk_low = 5   # Threshold from Tutorial 2
-  __thresh_walk_high = 20 # Threshold from Tutorial 2
+  __thresh_walk_low = 3   # Threshold from Tutorial 2
+  __thresh_walk_high = 6 # Threshold from Tutorial 2
   __thresh_jump_low = 20
-  __thresh_jump_high = 50
+  __thresh_jump_high = 55
   """
   Initialize the class instance
   """
@@ -60,7 +60,7 @@ class Pedometer:
     b, a = filt.create_filter(3, 2, "lowpass", self.__fs)  # Low-pass Filter Design
     lp = filt.filter(b, a, dt)  # Low-pass Filter Signal
     grad = filt.gradient(lp)
-    ma = filt.moving_average(grad, 50)  # Compute Moving Average
+    ma = 10*filt.moving_average(grad, 50)  # Compute Moving Average
 
     # Store the filtered data
     self.__filtered.add(ma.tolist())
