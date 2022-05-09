@@ -42,7 +42,7 @@ if __name__ == "__main__":
         if (current_time - previous_time > process_time):
           previous_time = current_time
 
-          steps, peaks, filtered = ped.process()
+          steps, f, peaks, filtered = ped.process()
           print("Step count: {:d}".format(steps))
           strsteps = str(steps)
 
