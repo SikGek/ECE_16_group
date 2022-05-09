@@ -14,14 +14,14 @@ class Pedometer:
   __l1 = None        # CircularList containing L1-norm
   __filtered = None  # CircularList containing filtered signal
   __num_samples = 1500  # The length of data maintained
-  __new_samples = 1500  # How many new samples exist to process
+  __new_samples = 512  # How many new samples exist to process
   __fs = 300           # Sampling rate in Hz
   __b = None         # Low-pass coefficients
   __a = None         # Low-pass coefficients
-  __thresh_walk_low = 3   # Threshold from Tutorial 2
-  __thresh_walk_high = 6 # Threshold from Tutorial 2
-  __thresh_jump_low = 20
-  __thresh_jump_high = 55
+  __thresh_walk_low = 2   # Threshold from Tutorial 2
+  __thresh_walk_high = 60 # Threshold from Tutorial 2
+  __thresh_jump_low = 30
+  __thresh_jump_high = 100
   """
   Initialize the class instance
   """
@@ -56,19 +56,21 @@ class Pedometer:
     # Grab only the new samples into a NumPy array
     x = np.array(self.__l1[ -self.__new_samples: ])
 
+
     dt = filt.detrend(x)  # Detrend the Signal
-    b, a = filt.create_filter(3, 2, "lowpass", self.__fs)  # Low-pass Filter Design
-    lp = filt.filter(b, a, dt)  # Low-pass Filter Signal
-    grad = filt.gradient(lp)
-    ma = 10*filt.moving_average(grad, 50)  # Compute Moving Average
+    grad = filt.gradient(dt)
+    ma = filt.moving_average(grad, 50)
+    b, a = filt.create_filter(3, 1, "lowpass", self.__fs)  # Low-pass Filter Design
+    lp = filt.filter(b, a, ma)  # Low-pass Filter Signal
+
 
     # Store the filtered data
-    self.__filtered.add(ma.tolist())
+    self.__filtered.add(lp.tolist())
 
     # Count the number of peaks in the filtered data
-    step_count, peaks = filt.count_peaks(ma,self.__thresh_walk_low,self.__thresh_walk_high)
+    step_count, peaks = filt.count_peaks(lp, self.__thresh_walk_low, self.__thresh_walk_high)
 
-    jump_count, peaks = filt.count_peaks(ma, self.__thresh_jump_low, self.__thresh_jump_high)
+    jump_count, peaks = filt.count_peaks(lp, self.__thresh_jump_low, self.__thresh_jump_high)
 
     # Update the step count and reset the new sample count
     self.__steps += step_count
