@@ -10,6 +10,7 @@ class Pedometer:
   Encapsulated class attributes (with default values)
   """
   __steps = 0        # the current step count
+  __jumps = 0
   __l1 = None        # CircularList containing L1-norm
   __filtered = None  # CircularList containing filtered signal
   __num_samples = 0  # The length of data maintained
@@ -17,14 +18,16 @@ class Pedometer:
   __fs = 0           # Sampling rate in Hz
   __b = None         # Low-pass coefficients
   __a = None         # Low-pass coefficients
-  __thresh_low = 25   # Threshold from Tutorial 2
-  __thresh_high = 100 # Threshold from Tutorial 2
-
+  __thresh_walk_low = 25   # Threshold from Tutorial 2
+  __thresh_walk_high = 185 # Threshold from Tutorial 2
+  __thresh_jump_low = 185
+  __thresh_jump_high = 500
   """
   Initialize the class instance
   """
   def __init__(self, num_samples, fs, data=None):
     self.__steps = 0
+    self.__jumps = 0
     self.__num_samples = num_samples
     self.__fs = fs
     self.__l1 = CircularList(data, num_samples)
@@ -54,26 +57,25 @@ class Pedometer:
     x = np.array(self.__l1[ -self.__new_samples: ])
 
     # Filter the signal (detrend, LP, MA, etc…)
-    # ...
-    # ...
-    # ... 
-    ma = filt.moving_average(x, 20)                   # Compute Moving Average
-    dt = filt.detrend(ma)                              # Detrend the Signal
-    b, a = filt.create_filter(3, 1, "lowpass", self.__fs)   # Low-pass Filter Design
-    lp = filt.filter(b, a, dt)                       # Low-pass Filter Signal
-
+    ma = filt.moving_average(x, 20)  # Compute Moving Average
+    dt = filt.detrend(ma)  # Detrend the Signal
+    b, a = filt.create_filter(3, 1, "lowpass", self.__fs)  # Low-pass Filter Design
+    lp = filt.filter(b, a, dt)  # Low-pass Filter Signal
     # Store the filtered data
     self.__filtered.add(lp.tolist())
 
     # Count the number of peaks in the filtered data
-    count, peaks = filt.count_peaks(lp,self.__thresh_low,self.__thresh_high)
+    step_count, peaks = filt.count_peaks(lp,self.__thresh_walk_low,self.__thresh_walk_high)
+
+    jump_count, peaks = filt.count_peaks(lp, self.__thresh_jump_low, self.__thresh_jump_high)
 
     # Update the step count and reset the new sample count
-    self.__steps += count
+    self.__steps += step_count
+    self.__jumps += jump_count
     self.__new_samples = 0
 
     # Return the step count, peak locations, and filtered data
-    return self.__steps, peaks, np.array(self.__filtered)
+    return self.__steps, self.__jumps, peaks, np.array(self.__filtered)
 
   """
   Clear the data buffers and step count
