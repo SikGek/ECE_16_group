@@ -18,7 +18,7 @@ class Pedometer:
   __fs = 300           # Sampling rate in Hz
   __b = None         # Low-pass coefficients
   __a = None         # Low-pass coefficients
-  __thresh_walk_low = 10   # Threshold from Tutorial 2
+  __thresh_walk_low = 5   # Threshold from Tutorial 2
   __thresh_walk_high = 20 # Threshold from Tutorial 2
   __thresh_jump_low = 20
   __thresh_jump_high = 50
@@ -57,18 +57,18 @@ class Pedometer:
     x = np.array(self.__l1[ -self.__new_samples: ])
 
     dt = filt.detrend(x)  # Detrend the Signal
-    b, a = filt.create_filter(3, 1, "lowpass", self.__fs)  # Low-pass Filter Design
+    b, a = filt.create_filter(3, 2, "lowpass", self.__fs)  # Low-pass Filter Design
     lp = filt.filter(b, a, dt)  # Low-pass Filter Signal
     grad = filt.gradient(lp)
-    ma = filt.moving_average(grad, 20)  # Compute Moving Average
+    ma = filt.moving_average(grad, 50)  # Compute Moving Average
 
     # Store the filtered data
     self.__filtered.add(ma.tolist())
 
     # Count the number of peaks in the filtered data
-    step_count, peaks = filt.count_peaks(lp,self.__thresh_walk_low,self.__thresh_walk_high)
+    step_count, peaks = filt.count_peaks(ma,self.__thresh_walk_low,self.__thresh_walk_high)
 
-    jump_count, peaks = filt.count_peaks(lp, self.__thresh_jump_low, self.__thresh_jump_high)
+    jump_count, peaks = filt.count_peaks(ma, self.__thresh_jump_low, self.__thresh_jump_high)
 
     # Update the step count and reset the new sample count
     self.__steps += step_count
