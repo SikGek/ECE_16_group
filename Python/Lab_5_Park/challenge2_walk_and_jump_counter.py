@@ -13,48 +13,54 @@ if __name__ == "__main__":
 
   ped = Pedometer(num_samples, fs, [])
 
-  comms = Communication('COM4', 115200)
+  comms = Communication('COM5', 115200)
   comms.clear()                   # just in case any junk is in the pipes
   comms.send_message("wearable")  # begin sending data
 
   try:
     previous_time = time()
     while(True):
+      # here we receive the upload message and we build out our circular lists
       message = comms.receive_message()
-      if message != None and "steps" in message:
-        print(message)
       if(message != None):
-        try:
-          (m1, m2, m3, m4) = message.split(',')
-        except ValueError:        # if corrupted data, skip the sample
-          continue
-
-        # Collect data in the pedometer
-        ped.add(int(m2),int(m3),int(m4))
-
-        # if enough time has elapsed, process the data and plot it
+        print(message)
+      if(message == "uploadData"):
+        print(message)
         current_time = time()
+        while(message != "uploadComplete"):
+          #our data is already being uploaded entry by entry.
+          try:
+            message = comms.receive_message()
+            (m1, m2, m3, m4) = message.split(',')
+          except ValueError:
+            continue
+          # Collect data in the pedometer
+          ped.add(int(m2),int(m3),int(m4))
 
-        try:
-          comms.send_message(strsteps)
-        except:
-          pass
+      # if enough time has elapsed, process the data and plot it
+      current_time = time()
+      # if we receive a request for jumps and steps, lets send it
+      message = comms.receive_message()
+      if (message == 'stepRequest'):
+        comms.send_message(strsteps)
+      if (message == 'jumpRequest'):
+        comms.send_message(strjumps)
+      if (current_time - previous_time > process_time):
+        previous_time = current_time
 
-        if (current_time - previous_time > process_time):
-          previous_time = current_time
+        steps, jumps, peaks, filtered = ped.process()
+        print("Step count: {:d}".format(steps))
+        strsteps = str(steps)
+        strjumps = str(jumps)
 
-          steps, peaks, filtered = ped.process()
-          print("Step count: {:d}".format(steps))
-          strsteps = str(steps)
+        comms.send_message(strsteps)
 
-          comms.send_message(strsteps)
-
-          plt.cla()
-          plt.plot(filtered)
-          plt.title("Step Count: %d" % steps)
-          plt.show(block=False)
-          plt.pause(0.001)
-          last_str = strsteps
+        plt.cla()
+        plt.plot(filtered)
+        plt.title("Step Count: %d" % steps)
+        plt.show(block=False)
+        plt.pause(0.001)
+        # last_str = strsteps
 
   except(Exception, KeyboardInterrupt) as e:
     print(e)                     # Exiting the program due to exception
