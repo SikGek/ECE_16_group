@@ -12,9 +12,14 @@ if __name__ == "__main__":
   process_time = 1                # compute the step count every second
   message = ''
   ped = Pedometer(num_samples, fs, [])
+<<<<<<< Updated upstream
   strsteps = '0'
   strjumps = '0'
   comms = Communication('COM5', 115200)
+=======
+
+  comms = Communication('COM7', 115200)
+>>>>>>> Stashed changes
   comms.clear()                   # just in case any junk is in the pipes
   comms.send_message("wearable")  # begin sending data
 

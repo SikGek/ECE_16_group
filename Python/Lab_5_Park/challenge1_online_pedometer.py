@@ -13,7 +13,11 @@ if __name__ == "__main__":
 
   ped = Pedometer(num_samples, fs, [])
 
+<<<<<<< Updated upstream
   comms = Communication('COM7', 115200)
+=======
+  comms = Communication("COM7", 115200)
+>>>>>>> Stashed changes
   comms.clear()                   # just in case any junk is in the pipes
   comms.send_message("wearable")  # begin sending data
 
@@ -26,7 +30,7 @@ if __name__ == "__main__":
           (m1, m2, m3, m4) = message.split(',')
         except ValueError:        # if corrupted data, skip the sample
           continue
-
+        #print(1)
         # Collect data in the pedometer
         ped.add(int(m2),int(m3),int(m4))
 
@@ -38,16 +42,20 @@ if __name__ == "__main__":
           comms.send_message(strsteps)
         except:
           pass
-
+        #print(1)
         if (current_time - previous_time > process_time):
           previous_time = current_time
+<<<<<<< Updated upstream
 
           steps, f, peaks, filtered = ped.process()
+=======
+          steps, peaks, filtered = ped.process()
+>>>>>>> Stashed changes
           print("Step count: {:d}".format(steps))
           strsteps = str(steps)
 
           comms.send_message(strsteps)
-
+          #print(1)
           plt.cla()
           plt.plot(filtered)
           plt.title("Step Count: %d" % steps)
