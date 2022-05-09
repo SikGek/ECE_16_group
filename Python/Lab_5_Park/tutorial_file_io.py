@@ -26,7 +26,7 @@ def collect_samples():
   ay = CircularList([], num_samples)
   az = CircularList([], num_samples)
 
-  comms = Communication('COM4', 115200)
+  comms = Communication('COM7', 115200)
   try:
     comms.clear() # just in case any junk is in the pipes
     # wait for user to start walking before starting to collect data
