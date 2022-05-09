@@ -20,7 +20,7 @@ class Pedometer:
   __b = None         # Low-pass coefficients
   __a = None         # Low-pass coefficients
   __thresh_walk_low = 2   # Threshold from Tutorial 2
-  __thresh_walk_high = 60 # Threshold from Tutorial 2
+  __thresh_walk_high = 30 # Threshold from Tutorial 2
   __thresh_jump_low = 30
   __thresh_jump_high = 100
   """
