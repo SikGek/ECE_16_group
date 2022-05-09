@@ -73,15 +73,17 @@ void loop() {
   }
   //display our stepCount and jumpCount on the OLED
   //receive step and jump count separated by a comma, save each to separate variables and print them individually
-  int startIndex = 0;
-  writeDisplay("Steps: ", 0, false);
-  writeDisplay("Jumps: ", 2, false);
-  int index = stepCount.indexOf(',', startIndex);           
-  String subMessage = stepCount.substring(startIndex, index);
-  startIndex = index + 1;
-  int index1 = stepCount.indexOf(',', startIndex);
-  String subMessage2 = stepCount.substring(startIndex, index1);
-  writeDisplay(subMessage.c_str(), 1, false);
-  writeDisplay(subMessage2.c_str(), 3, false);
+  if(stepCount != "wearable" || stepCount != "sleep"){
+    int startIndex = 0;
+    writeDisplay("Steps: ", 0, false);
+    writeDisplay("Jumps: ", 2, false);
+    int index = stepCount.indexOf(',', startIndex);           
+    String subMessage = stepCount.substring(startIndex, index);
+    startIndex = index + 1;
+    int index1 = stepCount.indexOf(',', startIndex);
+    String subMessage2 = stepCount.substring(startIndex, index1);
+    writeDisplay(subMessage.c_str(), 1, false);
+    writeDisplay(subMessage2.c_str(), 3, false);
+  }
   i+=1;
 }
