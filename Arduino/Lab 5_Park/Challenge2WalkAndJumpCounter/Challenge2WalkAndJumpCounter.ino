@@ -54,7 +54,7 @@ void loop() {
   current_button_time = millis();
   //can only press the button once a second
   if(current_button_time - before_button_time > 1000) {
-    if(digitalRead(BUTTON_PIN) == HIGH) {
+    if(digitalRead(BUTTON_PIN) == LOW) {
       Serial.print("button pressed");
       sendMessage("uploadData");
       for(j=0; j<513;j = j+1){
@@ -84,20 +84,21 @@ void loop() {
   //we must request for the jump and walk counter
   current_request_time=millis();
   if(current_request_time - before_request_time > 1000) {
-    sendMessage("stepRequest");
     stepCount = receiveMessage();
-    sendMessage("jumpRequest");
-    jumpCount = receiveMessage();
     before_request_time = millis();
   }
   //display our stepCount and jumpCount on the OLED
   current_display_time = millis();
-  if(current_display_time - before_display_time > 500) {
-    writeDisplay("Jumps: ", 0, true);
-    writeDisplay(jumpCount.c_str(), 1, false);
-    writeDisplay("Steps: ", 2, false);
-    writeDisplay(stepCount.c_str(), 3, false);
+    int startIndex = 0;
+    writeDisplay("Steps: ", 0, false);
+    writeDisplay("Jumps: ", 2, false);
+    int index = stepCount.indexOf(',', startIndex);           
+    String subMessage = stepCount.substring(startIndex, index);
+    startIndex = index + 1;
+    int index1 = stepCount.indexOf(',', startIndex);
+    String subMessage2 = stepCount.substring(startIndex, index1);
+    writeDisplay(subMessage.c_str(), 1, false);
+    writeDisplay(subMessage2.c_str(), 3, false);
     before_display_time = millis();
-  }
   i+=1;
 }

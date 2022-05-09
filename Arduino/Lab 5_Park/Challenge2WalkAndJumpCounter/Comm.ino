@@ -1,4 +1,4 @@
-#define USE_BT 0
+#define USE_BT 1
 
 /*
  * This block allows us to use "Ser" throughout our codebase. 
@@ -18,7 +18,7 @@
  */
 void setupCommunication() {
   #if USE_BT
-    Ser.begin("COM4"); // any unique name for BT
+    Ser.begin("COM8"); // any unique name for BT
   #else
     Ser.begin(115200);
   #endif
