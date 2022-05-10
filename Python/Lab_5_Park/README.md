@@ -3,7 +3,7 @@ William Lynch A14588777
 
 Tutorial 1:
 
-![t1_img](images/Peaks.png)
+![t1_img](images/Peaks.PNG)
 
 In this tutorial, we learned how to send sample data from the accelerometer on the arduino and collect it in our python code. With this sample data we computed the L1 norm of it, which is the sum of the absolute value of data in their respective axis and plotted it. After we plotted it, we were able to see peaks where we took steps and saved the numerical data to a .csv file for future reference.
 
@@ -22,8 +22,20 @@ In this tutorial, we learned how to make the pedometer class from scratch. Using
 
 Challenge 1:
 
+https://www.youtube.com/shorts/4O9T5Sxds84
+
+Here, we can see that there is a bit of a a lag between the data and the step counter, but the steps are being updated every time there is a positive peak in a specific threshold.
+
+Partner's video was not provided to me.
+
+https://www.youtube.com/watch?v=zJqSY-V_vHI
+
+Here, we can see that every time I move my arm back and forth, it counts one step consistently as shown by multiple sets of different repeitions of swings.
+
 Challenge 2:
 
 https://youtu.be/tLGgFZR2EPY
 
 For our algorithm, we stored each data we obtain from the accelerometer into a 1500 long array in arduino, then when the button is pressed, using a for loop we iterate through all of the arrays and send data 1 by 1, which we calculate the norm of it and store it into an array in python. Then we filter that array using different thresholds and store it into different variables for us to send print out and send back to the arduino.
+
+Please don't take too many points off... we tried our hardest and it was really hard... ;-; T^T
