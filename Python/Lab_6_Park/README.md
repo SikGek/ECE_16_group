@@ -57,7 +57,7 @@ https://youtu.be/-oVhJkKvMb8
 
 Challenge 3:
 
-In this challenge, instead of using a photodetector on the MCU, we used a normal webcam in order to measure heartbeat. By put our finger right up against the camera and shining a light on it, the camera sees the change in the amount of red, or blood, in our fingertips everytime our heart beats and we can take the average of that frame to put into our data to measure heartbeat. 
+In this challenge, instead of using a photodetector on the MCU, we used a normal webcam in order to measure heartbeat. By put our finger right up against the camera and shining a light on it, the camera sees the change in the amount of red, or blood, in our fingertips everytime our heart beats and we can take the average of that frame to put into our data to measure heartbeat. In my graph, we can see 22 beats in 16 seconds, which is about 1.4 beats per second or 84 beats per minutes. Sampling rate should be about 50 hz, or 50 samples every second and the sampling rate seems to be pretty consistent.
 
 In this gif, I showed the basics of opencv:
 
@@ -76,7 +76,7 @@ In this video we can see a little more consistent readings although there is a b
 
 https://www.youtube.com/watch?v=cTkaIriSYmE
 
-In this video, we can see that the readings are a little all over the place and a lot more sensitive, but uploaded it to show that our camera was indeed working.
+In this video, we can see that the readings are a little all over the place and a lot more sensitive, but uploaded it to show that our camera was indeed working. You can see when the heart rate unprecedently drops to about 30, my heart immediately starts beating faster jumping to about 120, this is because I was scared I messed something up, I think. :)
 
 | ![c3_graf_2](images/c3.PNG) |
 
