@@ -28,19 +28,24 @@ if __name__ == "__main__":
     comms.send_message("wearable")  # begin sending data
     # create our hearmonitor object
     heart = HRMonitor(num_samples, fs, [])
+    #start our camera
     cap = cv2.VideoCapture(0,cv2.CAP_DSHOW)
     try:
         previous_time = time()
         while(True):
             #receive message from the arduino
             message = comms.receive_message()
+            #read our camera
             _, frame = cap.read() 
             try:
                 #receive the raw data from arduino
                 #(timeppg, heartppg) = message.split(',')
+                #take the average of the pixels on the screen
                 new_sample = frame.mean(axis=0).mean(axis=0)
                 #print(new_sample)
+                #take the third index of the average since it is in BGR format by default
                 new_sample = new_sample[2] # replace the ? with index of the RED channel
+                #calculate the time
                 tim = time_ns()
                 tim = tim/1000000000
                 tim = tim - begin_tim
@@ -80,7 +85,6 @@ if __name__ == "__main__":
         print(e)
     finally:
         plt.plot(times, filtered)
-        
         plt.title("Estimated Heart Rate: {:.2f} bpm".format(hr))
         #plt.plot(times[peaks], filtered[peaks], 'rx')
         #plt.plot(times, [0.6]*len(filtered), "b--")
