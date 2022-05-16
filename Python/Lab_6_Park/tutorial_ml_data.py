@@ -1,6 +1,7 @@
 # Imports
 from ECE16Lib.Communication import Communication
 from ECE16Lib.CircularList import CircularList
+from ECE16Lib.HRMonitor import HRMonitor
 from matplotlib import pyplot as plt
 from time import sleep
 import numpy as np
@@ -29,12 +30,13 @@ def collect_samples():
       print(k)
       sleep(1)
     print("Begin!")
+
     comms.send_message("wearable") # begin sending data
 
     sample = 0
     while(sample < num_samples):
+
       message = comms.receive_message()
-      #print(message)
       if(message != None):
         try:
           (m1, _, _, _, m2) = message.split(',')
@@ -64,8 +66,8 @@ def estimate_sampling_rate(times):
 
 if __name__ == "__main__":
 
-  filename = "./data/ppg3.csv"
-  collect_new_data = True
+  filename = "./data/a14588777_04_58.csv"
+  collect_new_data = False
 
   # Get data from the MCU and save it if getting new data
   if(collect_new_data):
@@ -84,10 +86,15 @@ if __name__ == "__main__":
   fs = estimate_sampling_rate(t)
   print("Estimated sampling rate: {:.2f} Hz".format(fs))
 
+  hr_monitor = HRMonitor(500, 50)
+  hr_monitor.add(t, ppg)
+
+  hr, peaks, filtered = hr_monitor.process()
+
   # Plot the data
   plt.figure()
   plt.plot(t, ppg)
-  plt.title("PPG Signal")
+  plt.title("Estimated Heart Rate: {:.2f} bpm".format(hr))
   plt.xlabel("seconds")
   plt.ylabel("ADC Code")
   plt.show()

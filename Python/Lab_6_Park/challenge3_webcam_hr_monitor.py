@@ -11,7 +11,7 @@ import cv2
 if __name__ == "__main__":
 
     fs = 50                         # sampling rate of 50Hz
-    num_samples = 3000               # 10 seconds of data @ 50Hz
+    num_samples = 500               # 10 seconds of data @ 50Hz
     refresh_time = 1                # compute the heart rate every second
     heartppg = 0                    # this is where we will store our heart rate data from arduino
     timeppg = 0                     # this is where we will store our time data from arduino
@@ -19,7 +19,7 @@ if __name__ == "__main__":
     begin_tim = begin_tim/1000000000
 
     #initiliaze our circularlists to hold heart rate and time data
-    ppg = [CircularList([], num_samples)]
+    ppg = CircularList([], num_samples)
     times = CircularList([], num_samples)
 
     #initliaze connection to arduino
@@ -48,7 +48,7 @@ if __name__ == "__main__":
                 continue
             #add our data to circular list
             ppg.add(int(new_sample))
-            times.add(int(tim))
+            times.add(tim)
             # update our OLED with current heart rate once a second
             current_time = time()
             #print(current_time - previous_time)
@@ -69,7 +69,7 @@ if __name__ == "__main__":
                         output = "N/A"
                     print("Your heart rate is currently: ", output)
                     #send heart rate data to arduino
-                    
+                    comms.send_message(str(output))
                 except:
                     continue
             cv2.imshow('Input', frame)

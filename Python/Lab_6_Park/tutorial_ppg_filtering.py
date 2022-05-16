@@ -18,6 +18,9 @@ plt.subplot(212)
 plt.plot(t, dt)
 plt.show()
 
+b, a = filt.create_filter(5, 0.2, "highpass", 50)
+dt2 = filt.filter(b, a, ppg)
+
 # Smooth the signal with a small moving average
 ma = filt.moving_average(dt, 5)
 

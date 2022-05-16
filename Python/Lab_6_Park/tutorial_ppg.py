@@ -16,7 +16,7 @@ if __name__ == "__main__":
   az = CircularList([], num_samples)
   ppg = CircularList([], num_samples)
 
-  comms = Communication("COM8", 115200)
+  comms = Communication("COM4", 115200)
   comms.clear()                   # just in case any junk is in the pipes
   comms.send_message("wearable")  # begin sending data
 

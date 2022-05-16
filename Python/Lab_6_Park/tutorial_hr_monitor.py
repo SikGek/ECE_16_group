@@ -11,6 +11,7 @@ ppg = data[:,1]
 # Test the Heart Rate Monitor with offline data
 hr_monitor = HRMonitor(500, 50)
 hr_monitor.add(t, ppg)
+
 hr, peaks, filtered = hr_monitor.process()
 
 # Plot the results

@@ -28,7 +28,7 @@ def moving_average(x, win):
 """
 Detrend the signal by removing the moving average
 """
-def detrend(x, win=50):
+def detrend(x, win):
   return x - moving_average(x, win)
 
 """
@@ -70,3 +70,6 @@ def count_peaks(x, thresh_low, thresh_high):
       locations.append(peak)
 
   return count, locations
+
+def normalize(x):
+  return (x - min(x)) / (max(x) - min(x))
