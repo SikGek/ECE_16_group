@@ -147,11 +147,11 @@ class HRMonitor:
   
     return gmm
 
-  def predict(self, gmm ,ppg, fs):
+  def predict(self, gmm, fs):
     hr_est1 = []
-    test_data = process(ppg)
+    test_data = process(self.__ppg)
     labels = gmm.predict(test_data.reshape(-1,1))
-    hr_est, peaks = estimate_hr(labels, len(ppg), fs)
+    hr_est, peaks = estimate_hr(labels, len(self.__ppg), fs)
     hr_est1.append(hr_est)
     return hr_est
   """
