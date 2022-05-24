@@ -25,3 +25,12 @@ The final metric we decided to use was the Variance Score, which is basically th
 
 Challenge 2:
 
+https://www.youtube.com/shorts/Fja0dzJCiVc
+
+For our challenge 2, we simply added a new method in our hrmonitor class that when called, calls the various functions we defined in tutorial 2 in order to train the model using all of the data, except here, we don't use LOSOV to exclude one subject. Then this method return the trained model into our python code, which then passes that model into our predict method along with our fs every second. Then we add all of the data that we obtain from the MCU to our ppg circular list along with the time exactly like we did in Lab_6. Then in the HRMonitor class, it uses the ppg and time values that was added to the class and uses it to predict the heartrate, by first converting the circularlist of ppg's into an numpy array, passing that into the process function to process and filter it, predicting the labels after reshaping it, and then finally using the estimate_hr function to predict. Then that method returns the estimated heart rate, which the python code sends to the MCU for it to display.
+
+Challenge 3:
+
+https://www.youtube.com/watch?v=JJ9Z3zzNju8
+
+For our challenge 3, we implemented all of the previous challenges into this one wearable. We created a button that switches between the information of the pedometer,heart rate monitor and a watch. As you can see, at first it initially goes from a watch, then to the heart rate monitor. However, when we press the button again to go to the pedometer, it doesn't update the step count, even though we can see in the terminal that the correct data is being communicated between the MCU and our code. We coud not debug this issue, but given some more time, I believe this would be an easy fix. Our motor was also broken, but the arduino code shows that the motor would buzz whenever the button is pressed. The OLED displays all of the information, buzzer motor indicates when the state is being changed, accelerometer is being used for the pedometer, photodetector for the heart rate, and the button for actually changing the states. We change states by implementing a state machine with the MCU code.  Whenever we press the button we increment to a new state and send a message to the python serial that we have changed states. The python serial then switches to only computing the information for the state requested.  This saves a lot of memory and energy only having one state rendered at a time.
