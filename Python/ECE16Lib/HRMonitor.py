@@ -136,12 +136,15 @@ class HRMonitor:
     fs = 50
     directory = ".\\data"
     subjects = get_subjects(directory)
+    print(subjects, 1)
+    train_data = np.array([])
     for subject in subjects:
       for trial in range(1,6):
+        
         t, ppg, hr, fs_est = get_data(directory, subject, trial, fs)
         train_data = np.append(train_data, process(ppg))
       # Train the GMM
-
+    
     train_data = train_data.reshape(-1,1) # convert from (N,1) to (N,) vector
     gmm = GMM(n_components=2).fit(train_data)
   
@@ -149,6 +152,7 @@ class HRMonitor:
 
   def predict(self, gmm, fs):
     hr_est1 = []
+    #print(self.__ppg)
     test_data = process(self.__ppg)
     labels = gmm.predict(test_data.reshape(-1,1))
     hr_est, peaks = estimate_hr(labels, len(self.__ppg), fs)
