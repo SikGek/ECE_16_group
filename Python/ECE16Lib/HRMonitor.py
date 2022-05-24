@@ -136,11 +136,9 @@ class HRMonitor:
     fs = 50
     directory = ".\\data"
     subjects = get_subjects(directory)
-    print(subjects, 1)
     train_data = np.array([])
     for subject in subjects:
       for trial in range(1,6):
-        
         t, ppg, hr, fs_est = get_data(directory, subject, trial, fs)
         train_data = np.append(train_data, process(ppg))
       # Train the GMM
@@ -151,13 +149,14 @@ class HRMonitor:
     return gmm
 
   def predict(self, gmm, fs):
-    hr_est1 = []
-    #print(self.__ppg)
-    test_data = process(self.__ppg)
-    labels = gmm.predict(test_data.reshape(-1,1))
-    hr_est, peaks = estimate_hr(labels, len(self.__ppg), fs)
-    hr_est1.append(hr_est)
-    return hr_est
+      hr_est1 = []
+      y = np.array(self.__ppg)
+      print(y)
+      test_data = process(y)
+      labels = gmm.predict(test_data.reshape(-1,1))
+      hr_est, peaks = estimate_hr(labels, len(self.__ppg), fs)
+      hr_est1.append(hr_est)
+      return hr_est
   """
   Clear the data buffers and step count
   """
