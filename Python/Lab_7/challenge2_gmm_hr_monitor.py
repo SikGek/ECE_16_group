@@ -26,6 +26,7 @@ if __name__ == "__main__":
     # create our hearmonitor object
     heart = HRMonitor(num_samples, fs, [])
     gmm = heart.train()
+    print("train complete")
     try:
         previous_time = time()
         while(True):
@@ -43,19 +44,22 @@ if __name__ == "__main__":
 
                 # update our OLED with current heart rate once a second
                 current_time = time()
+                #print("we just never get the time")
                 if (current_time - previous_time > refresh_time):
                     previous_time = current_time
                     #update our heart rate object with our listed data
                     heart.add(times,ppg)
-                    try:
-                        #filter and process our data
-                        output = heart.predict(gmm, ppg, fs)
-                        #heart rate needs to be an int and scaled up
-                        print("Your heart rate is currently: ", output)
-                        #send heart rate data to arduino
-                        comms.send_message(str(output))
-                    except:
-                        continue
+                    _, _, _ = heart.process()
+
+                    #filter and process our data
+                    output = heart.predict(gmm, fs)
+
+                    print(output)
+                    #heart rate needs to be an int and scaled up
+                    print("Your heart rate is currently: ", output)
+                    #send heart rate data to arduino
+                    comms.send_message(str(output))
+                    
     except(KeyboardInterrupt) as e:
         print(e)
     finally:
